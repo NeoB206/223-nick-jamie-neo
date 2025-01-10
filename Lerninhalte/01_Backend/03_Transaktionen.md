@@ -79,9 +79,9 @@ Versuchen Sie zu identifizieren, wo folgende Probleme auftreten können:
 Da keine Datensätze erstellt oder gelöscht werden, gibt es keine Phantom
 Reads Welchen Isolationslevel brauchen Sie, um diese Probleme zu verhindern?
 
-P0 und P1:
+P0 und P1: REPEATABLE READ, um Non-repeatable Reads und Dirty Reads zu vermeiden.
 
-P2:
+P2: Da P2 die Summierung aller Werte in der Datenbank ausführt, benötigt es mindestens REPEATABLE READ, um konsistente Daten zu garantieren und Änderungen während der Summierung zu verhindern.
 
 ### Teilaufgabe 3: Praktische Analyse L-Bank
 
