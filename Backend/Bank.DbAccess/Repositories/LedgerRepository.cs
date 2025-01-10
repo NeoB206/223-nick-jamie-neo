@@ -11,12 +11,45 @@ public class LedgerRepository(IOptions<DatabaseSettings> databaseSettings) : ILe
 
     public void Book(decimal amount, Ledger from, Ledger to)
     {
+        LoadBalance(from);
         from.Balance -= amount;
-        Update(from);
+        Save(from);
         // Complicate calculations
         Thread.Sleep(250);
+        LoadBalance(to);
         to.Balance += amount;
-        Update(to);
+        Save(to);
+    }
+    
+    public void LoadBalance(Ledger ledger)
+    {
+        const string query = $"SELECT balance FROM {Ledger.CollectionName} WHERE id=@Id";
+
+        using var conn = new MySqlConnection(_databaseSettings.ConnectionString);
+        conn.Open();
+        using var cmd = new MySqlCommand(query, conn);
+        cmd.Parameters.AddWithValue("@Id", ledger.Id);
+        var result = cmd.ExecuteScalar();
+        if (result != DBNull.Value)
+        {
+            ledger.Balance = Convert.ToDecimal(result);
+        }
+        else
+        {
+            throw new Exception($"No balance found for Ledger with id {ledger.Id}");
+        }
+    }
+
+    public void Save(Ledger ledger)
+    {
+        const string query = $"UPDATE {Ledger.CollectionName} SET balance=@Balance WHERE id=@Id";
+
+        using var conn = new MySqlConnection(_databaseSettings.ConnectionString);
+        conn.Open();
+        using var cmd = new MySqlCommand(query, conn);
+        cmd.Parameters.AddWithValue("@Balance", ledger.Balance);
+        cmd.Parameters.AddWithValue("@Id", ledger.Id);
+        cmd.ExecuteNonQuery();
     }
     
     public decimal GetTotalMoney()
