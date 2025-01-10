@@ -66,6 +66,8 @@ Versuchen Sie zu identifizieren, wo folgende Probleme auftreten können:
 
 Welchen Isolationslevel brauchen Sie, um diese Probleme zu verhindern?
 
+Dirty Reads treten auf, wenn z. B. P1 bei Zeit 2 b schreibt und P0 oder P2 diesen Wert liest, bevor die Transaktion abgeschlossen ist. Non-repeatable Reads passieren, wenn P0 a liest (Zeit 0) und P2 später a überschreibt (Zeit 8). Um alle Probleme zu vermeiden, sollte das Isolationslevel Serializable verwendet werden.
+
 ### Teilaufgabe 2: Theoretische Analyse L-Bank
 
 Nehmen Sie folgenden Ablauf für die L-Bank:
