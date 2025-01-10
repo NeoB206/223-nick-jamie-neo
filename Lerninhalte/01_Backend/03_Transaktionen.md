@@ -143,41 +143,41 @@ Löschen Sie vor jedem neuen Befehl immer wieder alle vorherigen Befehle,
 sonst werden sie mehrfach ausgeführt.
 
 **Zeit 0:**
-Öffnen Sie den zweiten SQL-Tab, fragen Sie den Kontostand von a ab und schreiben Sie ihn auf:
+Öffnen Sie den zweiten SQL-Tab, fragen Sie den Kontostand von a ab und schreiben Sie ihn auf: ```5374```
 ```sql
 SELECT balance FROM ledgers WHERE id = 1
 ```
 
 **Zeit 1:**
-Öffnen Sie den dritten SQL-Tab, fragen Sie den Kontostand von a ab und schreiben Sie ihn auf
+Öffnen Sie den dritten SQL-Tab, fragen Sie den Kontostand von a ab und schreiben Sie ihn auf: ```5374```
 
 **Zeit 2:**
-Öffnen Sie den ersten SQL-Tab, fragen Sie den Kontostand von b ab und schreiben Sie ihn auf
+Öffnen Sie den ersten SQL-Tab, fragen Sie den Kontostand von b ab und schreiben Sie ihn auf: ```-1180```
 
 **Zeit 3:**
 P0 soll 20 von a zu b buchen.
 
-Rechnen Sie hier den neuen Kontostand von b aus (den bei Zeit 2 + 20):
+Rechnen Sie hier den neuen Kontostand von b aus (den bei Zeit 2 + 20): ```-1180 + 20 = -1160```
 
 Öffnen Sie den ersten SQL-Tab und schreiben Sie dieses Resultat in das Feld balance von b.
 
-Öffnen Sie den zweiten SQL-Tab, fragen Sie den Kontostand von b ab und schreiben Sie ihn auf:
+Öffnen Sie den zweiten SQL-Tab, fragen Sie den Kontostand von b ab und schreiben Sie ihn auf: ```-1160```
 
-Öffnen Sie das dritte Fenster und fragen Sie die Summe allen Geldes in Ledgers ab:
+Öffnen Sie das dritte Fenster und fragen Sie die Summe allen Geldes in Ledgers ab: ```11537```
 
 Fällt ihnen etwas auf?
 
 **Zeit 4:**
 P0 soll 20 von a zu b buchen.
 
-Rechnen Sie hier den neuen Kontostand von a aus (den bei Zeit 1 - 20):
+Rechnen Sie hier den neuen Kontostand von a aus (den bei Zeit 1 - 20): ```5354```
 
 Öffnen Sie den ersten SQL-Tab und schreiben Sie dieses Resultat in das Feldbalance von a.
 
 **Zeit 5:**
 P1 soll 30 von b zu a buchen.
 
-Rechnen Sie hier den neuen Kontostand von b aus (den bei Zeit 3 für P1 - 30):
+Rechnen Sie hier den neuen Kontostand von b aus (den bei Zeit 3 für P1 - 30): ```-1180```
 
 Öffnen Sie den zweiten SQL-Tab und schreiben Sie dieses Resultat in das Feld balance von b.
 
@@ -187,12 +187,12 @@ Ja, Sie müssen den Befehl nochmals eingeben, sonst weiss die Datenbank nicht, d
 
 P1 soll 30 von b zu a buchen.
 
-Rechnen Sie hier den neuen Kontostand von a aus (den bei Zeit 0 + 30):
+Rechnen Sie hier den neuen Kontostand von a aus (den bei Zeit 0 + 30): ```5384```
 
 Öffnen Sie den zweiten SQL-Tab und schreiben Sie dieses Resultat in das Feld
 balance von a.
 
-Und zum Spass: Wie viel Geld haben wir nun in der Datenbank?
+Und zum Spass: Wie viel Geld haben wir nun in der Datenbank? ```11527```
 Fällt ihnen was auf?
 
 ### Teilaufgabe 4: Praktische Analyse L-Bank mit Transaktionen
