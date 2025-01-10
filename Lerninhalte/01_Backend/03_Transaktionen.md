@@ -187,3 +187,5 @@ Starten Sie in jedem der drei Tabs eine Transaktion, indem Sie «BEGIN TRANSACTI
 Führen Sie die Befehle aus der Tabelle  erneut aus.
 
 Was fällt Ihnen auf?
+
+Mit Serializable warten die Transaktionen, bis eine abgeschlossen ist, wodurch alle Probleme (Dirty Reads, Non-repeatable Reads) verhindert werden. Bei Read Committed treten keine Dirty Reads auf, aber Non-repeatable Reads und Datenüberschreiben sind möglich. Serializable bietet maximale Sicherheit, Read Committed bessere Performance.
