@@ -1,4 +1,6 @@
+using System.Collections.Immutable;
 using System.Data;
+using System.Data.SqlClient;
 using Bank.Core.Models;
 using Microsoft.Extensions.Options;
 using MySqlConnector;
@@ -9,7 +11,7 @@ public class LedgerRepository(IOptions<DatabaseSettings> databaseSettings) : ILe
 {
     private readonly DatabaseSettings _databaseSettings = databaseSettings.Value;
 
-    public void Book(decimal amount, Ledger from, Ledger to)
+    public void oldBook(decimal amount, Ledger from, Ledger to)
     {
         LoadBalance(from);
         from.Balance -= amount;
@@ -52,67 +54,127 @@ public class LedgerRepository(IOptions<DatabaseSettings> databaseSettings) : ILe
         cmd.ExecuteNonQuery();
     }
     
-    public decimal GetTotalMoney()
+    public string Book(decimal amount, Ledger from, Ledger to)
     {
-        const string query = $"SELECT SUM(balance) AS TotalBalance FROM {Ledger.CollectionName}";
-        decimal totalBalance = 0;
-
-        using var conn = new MySqlConnection(_databaseSettings.ConnectionString);
-        conn.Open();
-        using var cmd = new MySqlCommand(query, conn);
-        var result = cmd.ExecuteScalar();
-        if (result != DBNull.Value)
+        using (MySqlConnection conn = new MySqlConnection(_databaseSettings.ConnectionString))
         {
-            totalBalance = Convert.ToDecimal(result);
-        }
+            conn.Open();
+            using (MySqlTransaction transaction = conn.BeginTransaction(IsolationLevel.Serializable))
+            {
+                try
+                {
+                    amount = 10;
+                    from.Balance = this.GetBalance(from.Id, conn, transaction) ?? throw new ArgumentNullException();
+                    from.Balance -= amount;
+                    this.Update(from, conn, transaction);
+                   // Complicate calculations
+                    Thread.Sleep(250);
+                    to.Balance = this.GetBalance(to.Id, conn, transaction) ?? throw new ArgumentNullException();
+                    to.Balance += amount;
+                    this.Update(to, conn, transaction);
 
-        return totalBalance;
+                    // Console.WriteLine($"Booking {amount} from {from.Name} to {to.Name}");
+
+                    transaction.Commit();
+                    return ".";
+                }
+                catch (Exception ex)
+                {
+                    //Console.WriteLine("Commit Exception Type: {0}", ex.GetType());
+                    //Console.WriteLine("  Message: {0}", ex.Message);
+
+                    // Attempt to roll back the transaction.
+                    try
+                    {
+                        transaction.Rollback();
+                        return "R";
+                    }
+                    catch (Exception ex2)
+                    {
+                        // Handle any errors that may have occurred on the server that would cause the rollback to fail.
+                        //Console.WriteLine("Rollback Exception Type: {0}", ex2.GetType());
+                        //Console.WriteLine("  Message: {0}", ex2.Message);
+                        return "E";
+                    }
+                }
+            }
+        }
     }
 
     public IEnumerable<Ledger> GetAllLedgers()
     {
-        var allLedgers = new List<Ledger>();
+        var allLedgers = new HashSet<Ledger>();
 
-        const string query = $"SELECT id, name, balance FROM {Ledger.CollectionName} ORDER BY name";
-        bool worked;
-        do
+        const string query = @$"SELECT id, name, balance FROM {Ledger.CollectionName}";
+        using (SqlConnection conn = new SqlConnection(_databaseSettings.ConnectionString))
         {
-            worked = true;
-            using var conn = new MySqlConnection(_databaseSettings.ConnectionString);
             conn.Open();
-            using var transaction = conn.BeginTransaction(IsolationLevel.Serializable);
-            try
+            using (SqlCommand cmd = new SqlCommand(query, conn))
             {
-                using var cmd = new MySqlCommand(query, conn, transaction);
-                using var reader = cmd.ExecuteReader();
-                while (reader.Read())
+                using (SqlDataReader reader = cmd.ExecuteReader())
                 {
-                    var id = reader.GetInt32(reader.GetOrdinal("id"));
-                    var name = reader.GetString(reader.GetOrdinal("name"));
-                    var balance = reader.GetDecimal(reader.GetOrdinal("balance"));
+                    while (reader.Read())
+                    {
+                        int id = reader.GetInt32(reader.GetOrdinal("id"));
+                        string name = reader.GetString(reader.GetOrdinal("name"));
+                        decimal balance = reader.GetDecimal(reader.GetOrdinal("balance"));
 
-                    allLedgers.Add(new Ledger { Id = id, Name = name, Balance = balance });
+                        allLedgers.Add(new Ledger()
+                        {
+                            Balance = balance,
+                            Id = id,
+                            Name = name
+                        });
+                    }
                 }
             }
-            catch (Exception ex)
+        }
+
+        return allLedgers.ToImmutableHashSet<Ledger>();
+    }
+
+    public decimal GetTotalMoney()
+    {
+        const string query = @$"SELECT SUM(balance) AS TotalBalance FROM {Ledger.CollectionName}";
+        decimal totalBalance = 0;
+
+        using (SqlConnection conn = new SqlConnection(_databaseSettings.ConnectionString))
+        {
+            conn.Open();
+            using (SqlTransaction transaction = conn.BeginTransaction(IsolationLevel.ReadCommitted))
             {
-                // Attempt to roll back the transaction.
                 try
                 {
-                    transaction.Rollback();
-                    if (ex.GetType() != typeof(Exception))
-                        worked = false;
+                    using (SqlCommand cmd = new SqlCommand(query, conn, transaction))
+                    {
+                        object result = cmd.ExecuteScalar();
+                        if (result != DBNull.Value)
+                        {
+                            totalBalance = Convert.ToDecimal(result);
+                        }
+                    }
                 }
-                catch (Exception ex2)
+                catch (Exception ex)
                 {
-                    // Handle any errors that may have occurred on the server that would cause the rollback to fail.
-                    if (ex2.GetType() != typeof(Exception))
-                        worked = false;
+                    Console.WriteLine("Commit Exception Type: {0}", ex.GetType());
+                    Console.WriteLine("  Message: {0}", ex.Message);
+
+                    // Attempt to roll back the transaction.
+                    try
+                    {
+                        transaction.Rollback();
+                    }
+                    catch (Exception ex2)
+                    {
+                        // Handle any errors that may have occurred on the server that would cause the rollback to fail.
+                        Console.WriteLine("Rollback Exception Type: {0}", ex2.GetType());
+                        Console.WriteLine("  Message: {0}", ex2.Message);
+                    }
                 }
             }
-        } while (!worked);
 
-        return allLedgers;
+            return totalBalance;
+        }
     }
     
     public Ledger? SelectOne(int id)
