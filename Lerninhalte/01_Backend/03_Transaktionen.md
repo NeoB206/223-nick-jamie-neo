@@ -92,14 +92,33 @@ Hier simulieren wir diesen Ablauf mit und ohne Transaktionen «von Hand».
 
 Bereiten Sie folgende Dinge vor:
 
-- ID des ersten Datensatz in der Tabelle ledgers (a):
-- ID des zweiten Datensatz in der Tabelle ledgers (b):
+- ID des ersten Datensatz in der Tabelle ledgers (a): ```1```
+- ID des zweiten Datensatz in der Tabelle ledgers (b): ```2```
 - SQL-Befehl um alles Geld zu summieren:
+```sql
+SELECT SUM(balance) AS total_balance FROM ledgers;
+```
 - SQL-Befehl um den Kontostand von a auszulesen:
+```sql
+SELECT balance FROM ledgers WHERE id = 1;
+```
 - SQL-Befehl um den Kontostand von b auszulesen:
+```sql
+SELECT balance FROM ledgers WHERE id = 2;
+```
 - SQL-Befehl um den Kontostand von a neu zu schreiben:
+```sql
+UPDATE ledgers SET balance = <neuer_wert> WHERE id = 1;
+```
 - SQL-Befehl um den Kontostand von b neu zu schreiben:
+```sql
+UPDATE ledgers SET balance = <neuer_wert> WHERE id = 2;
+```
 - Summe des Geldes zu Beginn:
+```sql
+-- Nach dem ersten Abfragen der Summen: 
+SELECT SUM(balance) FROM ledgers;
+```
 - Öffnen Sie drei Fenster für P0, P1 und P3:
 
 Schreiben Sie statt den Anweisungen nun die SQL-Befehle in die Tabelle.
@@ -110,13 +129,13 @@ Schreiben Sie statt den Anweisungen nun die SQL-Befehle in die Tabelle.
 
 | Zeit | P0 | P1 | P2 |
 | --- | --- | --- | --- |
-| 0 | | | |
-| 1 | | | |
-| 2 | | | |
-| 3 | | | |
-| 4 | | | |
-| 5 | | | |
-| 6 | | | |
+| 0 | SELECT balance FROM ledgers WHERE id = 1; | | |
+| 1 | | SELECT balance FROM ledgers WHERE id = 1; | |
+| 2 | SELECT balance FROM ledgers WHERE id = 2; | | |
+| 3 | UPDATE ledgers SET balance = <neuer_balance_b> WHERE id = 2; | SELECT balance FROM ledgers WHERE id = 2; | SELECT SUM(balance) AS total_balance FROM ledgers; |
+| 4 | UPDATE ledgers SET balance = <neuer_balance_a> WHERE id = 1; | | |
+| 5 | | UPDATE ledgers SET balance = <neuer_balance_b> WHERE id = 2; | |
+| 6 | | UPDATE ledgers SET balance = <neuer_balance_a> WHERE id = 1; | |
 
 Gehen Sie nun folgendermassen vor:
 
@@ -126,7 +145,7 @@ sonst werden sie mehrfach ausgeführt.
 **Zeit 0:**
 Öffnen Sie den zweiten SQL-Tab, fragen Sie den Kontostand von a ab und schreiben Sie ihn auf:
 ```sql
-SELECT balance FROM ledgers WHERE id = 16
+SELECT balance FROM ledgers WHERE id = 1
 ```
 
 **Zeit 1:**
