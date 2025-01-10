@@ -42,9 +42,7 @@ Im Projekt "DbAccess" befinden sich die Datenbankzugriffe, hier finden Sie auch 
 
 Ebenfalls in diesem Projekt finden Sie die Klasse DatabaseSettings.cs, diese Klasse enthält die Verbindungsstrings zur Datenbank. Diese werden durch die Appsettings befüllt.
 ```csharp
-    public string? DatabaseName { get; set; } // der Name der Datenbank
-    public string? MasterConnectionString { get; set; } // die Verbindung zum Datenbank Server, wenn die Datenbank noch nicht existiert
-    public string? ConnectionString { get; set; } // die Verbindung zum Datenbank Server, wenn die Datenbank erstellt wurde
+    public string? ConnectionString { get; set; } // die Verbindung zum Datenbank Server
 ```
 
 Klasse «Ledger»: Steht für ein Konto.

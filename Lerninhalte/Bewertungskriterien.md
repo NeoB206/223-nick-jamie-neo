@@ -4,15 +4,25 @@
 |----------|-----------------------------------------------------------------------------|------------------------------------------------------------|----------------------------------------------------------------|-----------------------------------------------------------|-------------------------------------------------------|-----------------------------------------------------------------------------------------|-------------------------------------------------------------|--------------------------------------------------------------|-------------------------------------------|-------------------------------------------------------------|--------------------------------------------------------------|
 |Max Punkte|3                                                                            |3                                                           |3                                                               |3                                                          |3                                                      |3                                                                                        |3                                                            |3                                                             |3                                          |3                                                            |3                                                             |
 
-| Note | Punkte |
-| ---- | ------ |
-| 6.0  | 31-33  |
-| 5.5  | 29-30  |
-| 5.0  | 27-28  |
-| 4.5  | 25-26  |
-| 4.0  | 22-24  |
-
 ![](2024-11-26-21-18-33.png)
+
+Zudem benötigt es eine Dokumentation, die folgendermassen bewertet wird:
+
+Dokumentation der implementierten Prozess und der Überlegungen.
+- Was war die Herausforderung? (3P)
+- Wie wurde die Herausforderung gelöst? (3P)
+- Was war das Resultat? (3P)
+
+Dokumentation der Tests und der Testergebnisse.
+- Welche Tests wurden durchgeführt? (3P)
+- Wie wurden die Tests durchgeführt? (3P)
+- Was war das Resultat? (3P)
+
+Dokumentation Total: 18 Punkte
+Total Punkte: 51 Punkte
+
+Notenformel (Punkte / Total Punkte * 5 + 1) = Note
+
 
 ## Hinweise
 
