@@ -164,3 +164,5 @@ Starten Sie das Programm mehrfach.
 Die Ausgabe sollte wie folgt aussehen:
 
 ![](2024-11-22-10-39-20.png)
+
+![](Screenshot-2025-01-13-083623.png)
