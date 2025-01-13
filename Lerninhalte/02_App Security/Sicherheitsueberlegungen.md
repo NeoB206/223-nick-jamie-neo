@@ -52,10 +52,10 @@ angelegt. Damit kann die Rechteverwaltung der Datenbank verwendet werden.
 Grundsätzlich können Sie für BenutzerInnen die Rechte zum Zugriff auf Tabellen (einfügen, löschen, ändern des Schemas, …) geben
 
 Beantworten Sie folgende Fragen zu Ihrer Hypothese:
-- Wie kommen die Daten zur Datenbank?
-- Was befindet sich auf den Rechner der Benutzer:innen?
-- Was befindet sich auf einem Server?
-- Welche Variante zur Verbindung haben Sie gewählt? Variante 1 oder 2?
+- Wie kommen die Daten zur Datenbank? ```Über die GUI zur Business-Logik, die sie verarbeitet und an die Datenbank weiterleitet.```
+- Was befindet sich auf den Rechner der Benutzer:innen? ```Die GUI zur Eingabe und Anzeige der Daten.```
+- Was befindet sich auf einem Server? ```Die Business-Logik und die Datenbank.```
+- Welche Variante zur Verbindung haben Sie gewählt? Variante 1 oder 2? ```Variante 1, da die Business-Logik zentral die Authentifizierung und Autorisierung steuert.```
 
 ### Teilaufgabe 2: Das Problem
 
