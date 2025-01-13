@@ -9,16 +9,14 @@ Schauen Sie sich jetzt auch mal das ".Web"-Projekt an.
 
 Schauen Sie sich das Projekt an und versuchen Sie folgende Fragen zu beantworten:
 
-Wo finden Sie die «JSON-MAN» Webseite?
-
 Wenn Sie die Verzeichnisnamen anschauen, welchem Architekturmuster folgt
 diese Applikation?
 
-Was befindet sich im Verzeichnis «Controllers» und was ist die Aufgabe?
+Was befindet sich im Verzeichnis «Controllers» und was ist die Aufgabe? ```Verarbeitung von HTTPS anfragen```
 
-Was befindet sich im Verzeichnis «Models» und was ist die Aufgabe?
+Was befindet sich im Verzeichnis «Models» und was ist die Aufgabe? ```Typen werden dort definiert```
 
-Wo wird die Datenbank gemacht und die Daten geseeded?
+Wo wird die Datenbank gemacht und die Daten geseeded? ```Migrations```
 
 Was für Benutzer mit was für Passworten und «Rollen» werden erstellt?
 
@@ -27,14 +25,14 @@ Schauen Sie mit SQL Management Studio die erstellten Tabellen und Daten an.
 Was wird als Passwort gespeichert und warum?
 
 Welche URL hat der Login-API-Controller-Endpunkt und was für eine Methode
-verwendet er?
+verwendet er? ```api/v1/LoginController, Post```
 
 Welche URL hat der LBankInfo-API-Controller-Endpunkt und was für eine
-Methode verwendet er?
+Methode verwendet er? ```api/v1/BankInfoController, Get```
 
-Welche URL hat die Liste aller ledgers im API-Controller-Endpunkt und was für eine Methode verwendet sie?
+Welche URL hat die Liste aller ledgers im API-Controller-Endpunkt und was für eine Methode verwendet sie? ```api/v1/LedgersController, Get```
 
-Wo wird der Benutzername und das Passwort überprüft?
+Wo wird der Benutzername und das Passwort überprüft? ```LoginController```
 $
 
 ### Teilaufgabe 1: Authentifizierung
