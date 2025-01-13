@@ -83,8 +83,13 @@ Starten Sie dotPeek und öffnen Sie die exe-Datei. Sie sehen den Quellcode.
 
 Wählen Sie «2-Tier-Security», «_2_Tier_Security», «Form1» und dann «Form1.cs»
 
-Fällt Ihnen etwas – für die Betreiber der Applikation – unangenehmes auf?
-Was ziehen Sie daraus für Schlüsse?
+Fällt Ihnen etwas – für die Betreiber der Applikation – unangenehmes auf? Was ziehen Sie daraus für Schlüsse?
+1. Fest codierte Verbindungszeichenkette
+    - Den Servernamen (LOVIATHAR\\SQLEXPRESS).
+    - Den Benutzernamen (administrator).
+    - Das Passwort (geheimesPasswort).
+2. Fehlende Fehlerbehandlung Fehler werden zwar abgefangen und angezeigt, werden jedoch direkt an den Benutzer weitergegeben, was interne Informationen über die Datenbank oder die Infrastruktur preisgeben könnte (z.B. Datenbankschema oder Fehlermeldungen).
+3. Mangel an rollenbasierter Zugriffskontrolle. Der verwendete Benutzer administrator deutet darauf hin, dass dieser Benutzer möglicherweise über umfassende Rechte in der Datenbank verfügt.
 
 Problem mit Variante 2
 
@@ -93,6 +98,11 @@ Applikation gespeichert werden.
 
 Nun gibt es ein neues Problem. Nehmen Sie an, eine Benutzerin möchte etwas buchen:
 Natürlich darf diese Person nur von ihrem eigenen Konto buchen! Der angelegte Benutzer muss aber das Änderungsrecht auf diese Tabelle haben, sonst kann gar nicht gebucht werden! Natürlich wird das vom GUI verhindert, aber was würden Sie als kreative/r Hacker:in vorschlagen?
+1. Direkter Datenbankzugriff
+2. SQL-Injection-Angriff
+3. Manipulation des Netzwerkverkehrs
+4. Reverse Engineering der Applikation
+5. Verwendung von privilegierten Benutzerberechtigungen
 
 
 ### Teilaufgabe 3: Lösung
