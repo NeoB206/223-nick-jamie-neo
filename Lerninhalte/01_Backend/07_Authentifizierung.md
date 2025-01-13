@@ -22,7 +22,7 @@ Beantworten Sie anhand des Quellcodes folgende Fragen:
 
 Benutzen Sie JSON-MAN oder POSTMAN und führen Sie folgende Schritte aus:
 
-1. Rufen Sie die Liste aller Ledgers ohne Authentifizierung auf, was passiert?
+1. Rufen Sie die Liste aller Ledgers ohne Authentifizierung auf, was passiert? ```Unauthorized```
 2. Loggen Sie sich als ein User mit der korrekten Rolle ein und rufen Sie die
-Liste aller Ledgers auf. Was passiert?
-3. Loggen Sie sich als ein User mit einer Rolle ohne Rechte ein und rufen Sie die Liste aller Ledgers auf. Was passiert?
+Liste aller Ledgers auf. Was passiert? ```Resultat kommt```
+3. Loggen Sie sich als ein User mit einer Rolle ohne Rechte ein und rufen Sie die Liste aller Ledgers auf. Was passiert? ```Unauthorized```
