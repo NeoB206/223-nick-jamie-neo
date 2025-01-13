@@ -109,11 +109,14 @@ Natürlich darf diese Person nur von ihrem eigenen Konto buchen! Der angelegte B
 
 ![Die Lösung](image.png)
 
-Frage: Welche Varianten für Username und Passwort sind denkbar?
+Frage: Welche Varianten für Username und Passwort sind denkbar? 
+```Zentrale Authentifizierung: Anmeldung über Dienste wie OAuth2, LDAP oder Active Directory. Vorteil: Standardisiert und sicher.```
 
 Wieso haben wir die Probleme bei Variante 1 (jede/r Benutzer:in verbindet sich mit ein und demselben Benutzer auf die Datenbank) nicht?
+```Kein direkter Datenbankzugriff: Benutzer:innen greifen nur über die Businesslogik auf die Datenbank zu. Zugangsdaten sind nicht in der GUI gespeichert.```
 
 Wieso haben wir die Probleme bei Variante 2 (für jede/n Benutzer:in wird in der Datenbank ein eigener User angelegt) nicht?
+```Keine Rechteprobleme: Benutzer:innen können nur auf die Daten zugreifen, die sie dürfen – gesteuert durch die Businesslogik.```
 
 Schlechte Nachricht: Das wird komplex.
 
