@@ -10,7 +10,7 @@ namespace Bank.Web.Controllers;
 public class LedgersController(ILedgerRepository ledgerRepository) : ControllerBase
 {
     [HttpGet]
-    [Authorize(Roles = "Administrators,Users")]
+    [Authorize(Roles = "Administrators")]
     public IEnumerable<Ledger> Get()
     {
         var allLedgers = ledgerRepository.GetAllLedgers();
