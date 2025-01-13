@@ -10,11 +10,11 @@ wurden.
 ## Teilaufgabe 1: Authentifizierung
 Beantworten Sie anhand des Quellcodes folgende Fragen:
 
-- Findet eine Authentisierung statt?
-- Wo und wie findet die Authentifizierung statt?
-- Was für einen Typ von Autorisierung verwendet dieses Projekt?
-- Wie werden die Zugriffe autorisiert? Gibt es in diesem Projekt Capabilities?
-- Wo werden den Benutzer:innen die Rollen zugewiesen und wo sind sie gespeichert?
+- Findet eine Authentisierung statt? ```Ja, eine Authentisierung findet statt```
+- Wo und wie findet die Authentifizierung statt? ```In der Methode "Authenticate", indem Benutzername und Passwort geprüft werden.```
+- Was für einen Typ von Autorisierung verwendet dieses Projekt? ```Rollenbasierte Autorisierung```
+- Wie werden die Zugriffe autorisiert? Gibt es in diesem Projekt Capabilities? ```Zugriffe basieren auf Benutzerrollen. Capabilities gibt es nicht.```
+- Wo werden den Benutzer:innen die Rollen zugewiesen und wo sind sie gespeichert? ```Rollen werden in "Update" zugewiesen und in der Users-Tabelle gespeichert.```
 
 ## Teilaufgabe 2: Authentifizierung
 
