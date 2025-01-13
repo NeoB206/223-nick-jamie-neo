@@ -46,7 +46,15 @@ Kopieren Sie sich das JWT.
 Fordern Sie nun eine Liste aller Ledgers an.
 
 Machen Sie den gleichen Aufruf ohne das Token im Header, was passiert?
+```
+Ohne Token kommt 401 Unauthorized
+Mit token kommt Erbegnis
+```
 Rufen Sie auch den Infopunkt mit und ohne Token auf, was ist der Unterschied?
+```
+Ohne Token nur Name und Version
+Mit Token noch mehr Infos
+```
 
 A: Mit Token wird die Benutzerinfo zurückgegeben.
 
