@@ -11,13 +11,14 @@ namespace BookingRepositoryTests
 {
     public class BookingRepositoryTests : IClassFixture<DependencyInjectionFixture>
     {
-        private readonly TestDbContext _context;
-        private readonly BookingRepository _repository;
+        private readonly AppDbContext _context;
+        private readonly IBookingRepository _repository;
 
         public BookingRepositoryTests(DependencyInjectionFixture fixture)
         {
             var scope = fixture.ServiceProvider.CreateScope();
-            _repository = scope.ServiceProvider.GetRequiredService<BookingRepository>();
+            _repository = scope.ServiceProvider.GetRequiredService<IBookingRepository>();
+            _context = scope.ServiceProvider.GetRequiredService<AppDbContext>();
             SeedDatabase();
         }
 
@@ -101,14 +102,5 @@ namespace BookingRepositoryTests
     public class DatabaseSettings
     {
         // Add necessary database settings properties if needed
-    }
-
-    public class AppDbContext : DbContext
-    {
-        public AppDbContext(DbContextOptions<AppDbContext> options) : base(options)
-        {
-        }
-
-        public DbSet<Ledger> Ledgers { get; set; }
     }
 }

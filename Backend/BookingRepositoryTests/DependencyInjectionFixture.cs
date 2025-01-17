@@ -1,8 +1,10 @@
 ﻿using Bank.DbAccess;
+using Bank.DbAccess.Data;
 using Bank.DbAccess.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 
 namespace BookingRepositoryTests;
@@ -20,16 +22,20 @@ public class DependencyInjectionFixture : IDisposable
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
             .Build();
 
-        var connectionString = "Server=localhost;Database=m223bank;User=root;Password=root;";
-            // configuration.GetConnectionString("TestDatabase");
+        var connectionString = configuration.GetSection("DatabaseSettings:ConnectionString").Value;
 
-        services.AddDbContext<TestDbContext>(options =>
+        services.AddDbContext<AppDbContext>(options =>
             options.UseMySql(
                 connectionString,
                 new MariaDbServerVersion(new Version(11, 6, 2))
             )
         );
         
+        var dbSettings = configuration.GetSection("DatabaseSettings").Get<DatabaseSettings>() ?? throw new InvalidOperationException();
+        var options = Options.Create(dbSettings); // this is needed to ensure compatability with the web application
+        services.AddSingleton<IOptions<DatabaseSettings>>(options);
+
+    
         services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
         services.AddTransient<ILedgerRepository, LedgerRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
@@ -39,17 +45,15 @@ public class DependencyInjectionFixture : IDisposable
 
         // Ensure the database is created
         using var scope = ServiceProvider.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<TestDbContext>();
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        dbContext.Database.Migrate();
         dbContext.Database.EnsureCreated();
     }
 
     public void Dispose()
     {
-        // Cleanup database if needed
         using var scope = ServiceProvider.CreateScope();
-        var dbContext = scope.ServiceProvider.GetRequiredService<TestDbContext>();
-        dbContext.Database.EnsureDeleted();
+        var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        dbContext.Database.EnsureDeletedAsync();
     }
-    
-    
 }

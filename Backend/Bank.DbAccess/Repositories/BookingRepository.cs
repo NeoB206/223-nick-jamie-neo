@@ -4,9 +4,8 @@ using Microsoft.Extensions.Options;
 
 namespace Bank.DbAccess.Repositories;
 
-public class BookingRepository(IOptions<DatabaseSettings> settings, AppDbContext context) : IBookingRepository
+public class BookingRepository(AppDbContext context) : IBookingRepository
 {
-    private readonly DatabaseSettings _settings = settings.Value;
     private readonly AppDbContext _context = context;
 
     public bool Book(int sourceLedgerId, int destinationLedgerId, decimal amount)
