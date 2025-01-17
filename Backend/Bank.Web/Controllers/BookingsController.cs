@@ -16,11 +16,18 @@ public class BookingsController(IBookingRepository bookingRepository) : Controll
     {
         return await Task.Run(() =>
         {
-            IActionResult response = Ok();
+            IActionResult response;
+            var bookingSuccess = bookingRepository.Book(booking.SourceId, booking.DestinationId, booking.Amount);
 
-            // Rufe "Book" im "BookingRepository" auf.
-            // Noch besser wäre es, wenn du einen Service verwenden würdest, der die Geschäftslogik enthält.
-            // Gib je nach Erfolg OK() oder Conflict() zurück
+            if (bookingSuccess)
+            {
+                response = Ok(new { Message = "Booking successful" });
+            }
+            else
+            {
+                response = BadRequest(new { Message = "Booking failed. Please check the source account balance or try again later." });
+            }
+
             return response;
         });
     }
