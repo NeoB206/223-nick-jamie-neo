@@ -52,19 +52,18 @@ namespace L_Bank.Tests.Loadtest.Cli
         
         static ScenarioProps CreateLoadTestScenario(string jwt)
         {
-            using var httpClient = new HttpClient();
 
             var scenario = Scenario.Create("http_scenario", async context =>
                 {
                     var request =
-                        Http.CreateRequest("GET", "https://nbomber.com")
+                        Http.CreateRequest("GET", "http://localhost:5000/api/v1/BankInfo")
                             .WithHeader("Accept", "text/html");
                     // .WithHeader("Accept", "application/json")
                     // .WithBody(new StringContent("{ id: 1 }", Encoding.UTF8, "application/json");
                     // .WithBody(new ByteArrayContent(new [] {1,2,3}))
                         
 
-                    var response = await Http.Send(httpClient, request);
+                    var response = await Http.Send(HttpClient, request);
 
                     return response;
                 })
