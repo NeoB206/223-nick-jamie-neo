@@ -17,6 +17,9 @@ export class LedgerComponent implements OnInit {
     toLedgerId: number | null = null;
     amount: number | null = null;
     transferMessage = '';
+    name = '';
+    balance = 0;
+    deleteId = 0;
 
     constructor(private ledgerService: LedgerService) {}
 
@@ -50,5 +53,13 @@ export class LedgerComponent implements OnInit {
         } else {
             this.transferMessage = 'Please fill in all fields with valid data.';
         }
+    }
+
+    onSubmitCreate(): void {
+        this.ledgerService.createLedger(this.name, this.balance)?.subscribe(() => window.location.reload());
+    }
+
+    onSubmitDelete(): void {
+        this.ledgerService.deleteLedger(this.deleteId).subscribe(() => window.location.reload());
     }
 }

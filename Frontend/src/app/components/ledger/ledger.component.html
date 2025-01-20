@@ -2,8 +2,24 @@
     <h2>Ledgers</h2>
     <ul>
         <li *ngFor="let ledger of ledgers">
+            {{ ledger.id }}:
             <strong>{{ ledger.name }}</strong
             >: {{ ledger.balance | currency }}
         </li>
     </ul>
+    <div>
+        <h3>Create Ledger</h3>
+        <form (ngSubmit)="onSubmitCreate()">
+            <input type="text" placeholder="Name" [(ngModel)]="name" name="name" required />
+            <input type="number" placeholder="Balance" [(ngModel)]="balance" name="balance" required />
+            <button type="submit">Submit</button>
+        </form>
+    </div>
+    <div>
+        <h3>Delete Ledger</h3>
+        <form (ngSubmit)="onSubmitDelete()">
+            <input type="number" placeholder="Balance" [(ngModel)]="deleteId" name="balance" required />
+            <button type="submit">Delete</button>
+        </form>
+    </div>
 </div>

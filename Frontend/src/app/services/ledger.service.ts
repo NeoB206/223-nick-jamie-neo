@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpStatusCode } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Ledger } from '../models/ledger.interface';
 import { AuthService } from './auth.service';
@@ -31,5 +31,20 @@ export class LedgerService {
             amount,
         };
         return this.http.post(`${this.apiUrl}/ledgers/transfer`, payload);
+    }
+
+    createLedger(name: string, balance: number) {
+        if (name != '' && name != null && balance > 0) {
+            const payload = {
+                name,
+                balance,
+            };
+            return this.http.post(`${this.apiUrl}/ledgers`, payload);
+        }
+        return;
+    }
+
+    deleteLedger(id: number) {
+        return this.http.delete(`${this.apiUrl}/ledgers/${id}`);
     }
 }
