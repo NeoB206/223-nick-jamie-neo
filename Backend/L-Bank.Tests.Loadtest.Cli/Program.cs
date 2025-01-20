@@ -4,6 +4,8 @@ using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using NBomber.Contracts;
 using NBomber.Contracts.Stats;
@@ -21,7 +23,7 @@ namespace L_Bank.Tests.Loadtest.Cli
             try
             {
                 // Login to get JWT token
-                string jwt = await Login("testuser", "testuserpass");
+                string jwt = await Login("admin", "adminpass");
                 Console.WriteLine("Login successful. JWT received.");
 
                 // Get starting money
@@ -30,8 +32,9 @@ namespace L_Bank.Tests.Loadtest.Cli
 
                 // Run the load test
                 var scenario = CreateLoadTestScenario(jwt);
+                var bookingScenario = CreateBookingLoadTestScenario(jwt);
                 NBomberRunner
-                    .RegisterScenarios(scenario)
+                    .RegisterScenarios(scenario, bookingScenario)
                     .WithReportFileName("fetch_users_report")
                     .WithReportFolder("fetch_users_reports")
                     .WithReportFormats(ReportFormat.Html)
@@ -124,6 +127,50 @@ namespace L_Bank.Tests.Loadtest.Cli
                         during: TimeSpan.FromSeconds(30))
                 );
 
+            return scenario;
+        }
+        
+        static ScenarioProps CreateBookingLoadTestScenario(string jwt)
+        {
+            var scenario = Scenario.Create("booking_scenario", async context =>
+                {
+                    var bookingData = new
+                    {
+                        sourceId = 1,
+                        destinationId = 2,
+                        amount = 10,
+                        source = new
+                        {
+                            id = 1,
+                            name = "string",
+                            balance = 10000
+                        },
+                        destination = new
+                        {
+                            id = 2,
+                            name = "string",
+                            balance = 10000
+                        }
+                    };
+ 
+                    var jsonContent = JsonSerializer.Serialize(bookingData);
+ 
+                    var request = Http.CreateRequest("POST", "http://localhost:5000/api/v1/Bookings")
+                        .WithHeader("Accept", "application/json")
+                        .WithHeader("Authorization", $"Bearer {jwt}")
+                        .WithBody(new StringContent(jsonContent, Encoding.UTF8, "application/json"));
+ 
+                    var response = await Http.Send(HttpClient, request);
+
+                    return response;
+                })
+                .WithoutWarmUp()
+                .WithLoadSimulations(
+                    Simulation.Inject(rate: 50, // 50 Anfragen pro Sekunde
+                        interval: TimeSpan.FromSeconds(1), // Intervall zwischen Anfragen
+                        during: TimeSpan.FromSeconds(30)) // Gesamtdauer des Tests
+                );
+ 
             return scenario;
         }
 
