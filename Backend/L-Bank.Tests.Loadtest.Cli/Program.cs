@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
-using System.Text;
-using System.Text.Json;
 using System.Threading.Tasks;
 using NBomber.Contracts;
 using NBomber.Contracts.Stats;
@@ -24,22 +24,37 @@ namespace L_Bank.Tests.Loadtest.Cli
                 string jwt = await Login("testuser", "testuserpass");
                 Console.WriteLine("Login successful. JWT received.");
 
-                // Get all ledgers
-                var ledgers = await GetAllLedgers(jwt);
-                Console.WriteLine("Ledgers received:");
-                foreach (var ledger in ledgers)
-                {
-                    Console.WriteLine($"- {ledger.Name}");
-                }
-                
+                // Get starting money
+                double startingMoney = await GetTotalMoney(jwt);
+                Console.WriteLine($"Starting money: {startingMoney}");
+
+                // Run the load test
                 var scenario = CreateLoadTestScenario(jwt);
-                
                 NBomberRunner
                     .RegisterScenarios(scenario)
                     .WithReportFileName("fetch_users_report")
                     .WithReportFolder("fetch_users_reports")
                     .WithReportFormats(ReportFormat.Html)
                     .Run();
+
+                // Get ending money
+                double endingMoney = await GetTotalMoney(jwt);
+                Console.WriteLine($"Ending money: {endingMoney}");
+
+                // Compare and output result
+                double difference = endingMoney - startingMoney;
+                Console.WriteLine($"Difference: {difference:F4}");
+                if (difference == 0)
+                {
+                    Console.ForegroundColor = ConsoleColor.Green;
+                    Console.WriteLine("STARTING AND ENDING MONEY OK!");
+                }
+                else
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.WriteLine("MONEY HAS CHANGED!");
+                }
+                Console.ResetColor();
             }
             catch (Exception ex)
             {
@@ -49,38 +64,10 @@ namespace L_Bank.Tests.Loadtest.Cli
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }
-        
-        static ScenarioProps CreateLoadTestScenario(string jwt)
-        {
-
-            var scenario = Scenario.Create("http_scenario", async context =>
-                {
-                    var request =
-                        Http.CreateRequest("GET", "http://localhost:5000/api/v1/BankInfo")
-                            .WithHeader("Accept", "text/html");
-                    // .WithHeader("Accept", "application/json")
-                    // .WithBody(new StringContent("{ id: 1 }", Encoding.UTF8, "application/json");
-                    // .WithBody(new ByteArrayContent(new [] {1,2,3}))
-                        
-
-                    var response = await Http.Send(HttpClient, request);
-
-                    return response;
-                })
-                .WithoutWarmUp()
-                .WithLoadSimulations(
-                    Simulation.Inject(rate: 100, 
-                        interval: TimeSpan.FromSeconds(1),
-                        during: TimeSpan.FromSeconds(30))
-                );
-
-            return scenario;
-        }
-
 
         private static async Task<string> Login(string username, string password)
         {
-            var loginUrl = "http://localhost:5000/api/v1/Login"; 
+            var loginUrl = "http://localhost:5000/api/v1/Login";
 
             var loginPayload = new
             {
@@ -99,11 +86,11 @@ namespace L_Bank.Tests.Loadtest.Cli
             return responseData?.Token ?? throw new Exception("JWT token not received.");
         }
 
-        private static async Task<List<Ledger>> GetAllLedgers(string jwt)
+        private static async Task<double> GetTotalMoney(string jwt)
         {
-            var ledgersUrl = "http://localhost:5000/api/v1/Ledgers"; 
+            var ledgersUrl = "http://localhost:5000/api/v1/Ledgers";
 
-            HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwt);
+            HttpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", jwt);
 
             var response = await HttpClient.GetAsync(ledgersUrl);
 
@@ -113,10 +100,33 @@ namespace L_Bank.Tests.Loadtest.Cli
             }
 
             var ledgers = await response.Content.ReadFromJsonAsync<List<Ledger>>();
-            return ledgers ?? new List<Ledger>();
+            if (ledgers == null) throw new Exception("Failed to deserialize ledgers.");
+
+            return ledgers.Sum(ledger => ledger.Amount);
         }
 
-        // Classes for API response deserialization
+        static ScenarioProps CreateLoadTestScenario(string jwt)
+        {
+            var scenario = Scenario.Create("http_scenario", async context =>
+                {
+                    var request = Http.CreateRequest("GET", "http://localhost:5000/api/v1/BankInfo")
+                                      .WithHeader("Authorization", $"Bearer {jwt}")
+                                      .WithHeader("Accept", "application/json");
+
+                    var response = await Http.Send(HttpClient, request);
+
+                    return response;
+                })
+                .WithoutWarmUp()
+                .WithLoadSimulations(
+                    Simulation.Inject(rate: 100,
+                        interval: TimeSpan.FromSeconds(1),
+                        during: TimeSpan.FromSeconds(30))
+                );
+
+            return scenario;
+        }
+
         public class LoginResponse
         {
             public string Token { get; set; }
@@ -126,6 +136,7 @@ namespace L_Bank.Tests.Loadtest.Cli
         {
             public int Id { get; set; }
             public string Name { get; set; }
+            public double Amount { get; set; }
         }
     }
 }
