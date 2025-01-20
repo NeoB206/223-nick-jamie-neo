@@ -11,4 +11,5 @@ public interface ILedgerRepository
     Ledger? SelectOne(int id);
     void Update(Ledger ledger);
     decimal? GetBalance(int ledgerId);
+    Ledger Create(Ledger ledger);
 }

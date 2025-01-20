@@ -109,4 +109,11 @@ public class LedgerRepository : ILedgerRepository
     {
         return _dbContext.Ledgers.AsNoTracking().FirstOrDefault(l => l.Id == id);
     }
+
+    public Ledger Create(Ledger ledger)
+    {
+        _dbContext.Ledgers.Add(ledger);
+        _dbContext.SaveChanges();
+        return ledger;
+    }
 }
