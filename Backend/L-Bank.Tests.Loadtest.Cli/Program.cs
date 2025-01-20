@@ -17,7 +17,7 @@ namespace LBank.Tests.Loadtest.Cli
             try
             {
                 // Login to get JWT token
-                string jwt = await Login("admin", "adminpass");
+                string jwt = await Login("testuser", "testuserpass");
                 Console.WriteLine("Login successful. JWT received.");
 
                 // Get all ledgers
