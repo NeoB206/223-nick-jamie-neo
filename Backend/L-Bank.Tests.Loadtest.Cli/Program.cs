@@ -39,7 +39,7 @@ namespace LBank.Tests.Loadtest.Cli
 
         private static async Task<string> Login(string username, string password)
         {
-            var loginUrl = "https://localhost:5000/api/v1/Login"; // Replace with your API URL
+            var loginUrl = "http://localhost:5000/api/v1/Login"; 
 
             var loginPayload = new
             {
@@ -60,7 +60,7 @@ namespace LBank.Tests.Loadtest.Cli
 
         private static async Task<List<Ledger>> GetAllLedgers(string jwt)
         {
-            var ledgersUrl = "https://localhost:5000/api/v1/Ledgers"; // Replace with your API URL
+            var ledgersUrl = "http://localhost:5000/api/v1/Ledgers"; 
 
             HttpClient.DefaultRequestHeaders.Authorization = new System.Net.Http.Headers.AuthenticationHeaderValue("Bearer", jwt);
 
