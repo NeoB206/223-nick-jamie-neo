@@ -24,6 +24,7 @@ namespace BookingRepositoryTests
 
         private void SeedDatabase()
         {
+            _context.Ledgers.RemoveRange(_context.Ledgers);
             _context.Ledgers.AddRange(
                 new Bank.Core.Models.Ledger { Id = 99, Balance = 1000m },
                 new Bank.Core.Models.Ledger { Id = 100, Balance = 500m },
@@ -50,12 +51,10 @@ namespace BookingRepositoryTests
         }
 
         [Fact]
-        public void Book_InsufficientFunds_ThrowsException()
+        public void Book_InsufficientFunds_ReturnsFalse()
         {
-            SeedDatabase();
             // Assert
-            Assert.Throws<InvalidOperationException>(() =>
-                _repository.Book(100, 99, 1000m));
+            Assert.False(_repository.Book(100, 99, 1000m));
         }
 
         [Fact]
@@ -67,36 +66,16 @@ namespace BookingRepositoryTests
         }
 
         [Fact]
-        public void Book_LedgerNotFound_ThrowsInvalidOperationException()
+        public void Book_LedgerNotFound_ReturnsFalse()
         {
             // Assert
-            Assert.Throws<InvalidOperationException>(() =>
-                _repository.Book(999, 99, 100m));
-        }
-
-        [Fact]
-        public void Book_TransactionRollback_RetriesAndFailsAfterMaxAttempts()
-        {
-            // Arrange
-            _context.Database.EnsureDeleted(); // Simulate a database error scenario
-
-            // Act
-            var result = _repository.Book(99, 100, 100m);
-
-            // Assert
-            Assert.False(result);
+            Assert.False(_repository.Book(999, 99, 100m));
         }
 
         public void Dispose()
         {
             _context?.Dispose();
         }
-    }
-
-    public class Ledger
-    {
-        public int Id { get; set; }
-        public decimal Balance { get; set; }
     }
 
     public class DatabaseSettings

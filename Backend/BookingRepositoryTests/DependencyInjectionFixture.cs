@@ -46,6 +46,7 @@ public class DependencyInjectionFixture : IDisposable
         // Ensure the database is created
         using var scope = ServiceProvider.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
+        dbContext.Database.EnsureDeleted();
         dbContext.Database.Migrate();
         dbContext.Database.EnsureCreated();
     }
@@ -54,6 +55,6 @@ public class DependencyInjectionFixture : IDisposable
     {
         using var scope = ServiceProvider.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-        dbContext.Database.EnsureDeletedAsync();
+        dbContext.Database.EnsureDeleted();
     }
 }

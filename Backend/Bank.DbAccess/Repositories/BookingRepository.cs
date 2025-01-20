@@ -53,7 +53,7 @@ public class BookingRepository(AppDbContext context) : IBookingRepository
                 {
                     return false;
                 }
-                // Retry logic: transaction will be retried unless a specific condition is met (e.g., max retries)
+                // Retry logic: transaction will be retried unless max retries
             }
         }
 
