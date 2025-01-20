@@ -33,7 +33,7 @@ Beachte auch die READMEs in den einzelnen Projekten beim Setup der Umgebung.
     2. Concurrent Tests
     3. Lasttests
 - Wie wurden die Tests durchgeführt? (3P)
-    1. Mithilfe von xUnit
+    1. Ohne Mocks, mit einer Testdatenbank
     2. Mithilfe von xUnit
     3. Mithilfe von NBomber
 - Was war das Resultat? (3P)
