@@ -109,4 +109,27 @@ public class LedgerRepository : ILedgerRepository
     {
         return _dbContext.Ledgers.AsNoTracking().FirstOrDefault(l => l.Id == id);
     }
+    
+    public void Delete(int id)
+    {
+        using var transaction = _dbContext.Database.BeginTransaction();
+
+        try
+        {
+            var ledger = _dbContext.Ledgers.Find(id);
+            if (ledger == null)
+            {
+                throw new Exception($"Ledger with ID {id} does not exist.");
+            }
+
+            _dbContext.Ledgers.Remove(ledger);
+            _dbContext.SaveChanges();
+            transaction.Commit();
+        }
+        catch (Exception)
+        {
+            transaction.Rollback();
+            throw;
+        }
+    }
 }

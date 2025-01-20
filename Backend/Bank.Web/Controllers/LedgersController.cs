@@ -31,4 +31,19 @@ public class LedgersController(ILedgerRepository ledgerRepository) : ControllerB
     {
         ledgerRepository.Update(ledger);
     }
+    
+    [HttpDelete("{id:int}")]
+    [Authorize(Roles = "Administrators")]
+    public IActionResult Delete(int id)
+    {
+        try
+        {
+            ledgerRepository.Delete(id);
+            return NoContent(); // Status 204 - Kein Inhalt
+        }
+        catch (Exception ex)
+        {
+            return NotFound(new { Message = $"Ledger with ID {id} not found. Error: {ex.Message}" });
+        }
+    }
 }
