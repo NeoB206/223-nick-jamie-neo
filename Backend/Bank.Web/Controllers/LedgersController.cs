@@ -46,4 +46,17 @@ public class LedgersController(ILedgerRepository ledgerRepository) : ControllerB
             return NotFound(new { Message = $"Ledger with ID {id} not found. Error: {ex.Message}" });
         }
     }
+    
+    [HttpPost]
+    [Authorize(Roles = "Administrators")]
+    public ActionResult<Ledger> Create([FromBody] Ledger ledger)
+    {
+        if (ledger.Balance < 0 || ledger.Name == null || ledger.Name == "")
+        {
+            return BadRequest("Ledger data is invalid.");
+        }
+
+        ledgerRepository.Create(ledger);
+        return CreatedAtAction(nameof(Get), new { id = ledger.Id }, ledger);
+    }
 }
