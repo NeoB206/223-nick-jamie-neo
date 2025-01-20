@@ -5,8 +5,12 @@ using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Threading.Tasks;
+using NBomber.Contracts;
+using NBomber.Contracts.Stats;
+using NBomber.CSharp;
+using NBomber.Http.CSharp;
 
-namespace LBank.Tests.Loadtest.Cli
+namespace L_Bank.Tests.Loadtest.Cli
 {
     class Program
     {
@@ -27,6 +31,15 @@ namespace LBank.Tests.Loadtest.Cli
                 {
                     Console.WriteLine($"- {ledger.Name}");
                 }
+                
+                var scenario = CreateLoadTestScenario(jwt);
+                
+                NBomberRunner
+                    .RegisterScenarios(scenario)
+                    .WithReportFileName("fetch_users_report")
+                    .WithReportFolder("fetch_users_reports")
+                    .WithReportFormats(ReportFormat.Html)
+                    .Run();
             }
             catch (Exception ex)
             {
@@ -36,6 +49,35 @@ namespace LBank.Tests.Loadtest.Cli
             Console.WriteLine("Press any key to exit...");
             Console.ReadKey();
         }
+        
+        static ScenarioProps CreateLoadTestScenario(string jwt)
+        {
+            using var httpClient = new HttpClient();
+
+            var scenario = Scenario.Create("http_scenario", async context =>
+                {
+                    var request =
+                        Http.CreateRequest("GET", "https://nbomber.com")
+                            .WithHeader("Accept", "text/html");
+                    // .WithHeader("Accept", "application/json")
+                    // .WithBody(new StringContent("{ id: 1 }", Encoding.UTF8, "application/json");
+                    // .WithBody(new ByteArrayContent(new [] {1,2,3}))
+                        
+
+                    var response = await Http.Send(httpClient, request);
+
+                    return response;
+                })
+                .WithoutWarmUp()
+                .WithLoadSimulations(
+                    Simulation.Inject(rate: 100, 
+                        interval: TimeSpan.FromSeconds(1),
+                        during: TimeSpan.FromSeconds(30))
+                );
+
+            return scenario;
+        }
+
 
         private static async Task<string> Login(string username, string password)
         {

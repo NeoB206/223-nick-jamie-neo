@@ -8,4 +8,9 @@
         <Nullable>enable</Nullable>
     </PropertyGroup>
 
+    <ItemGroup>
+      <PackageReference Include="NBomber" Version="5.9.0-beta-1" />
+      <PackageReference Include="NBomber.Http" Version="5.2.2-beta.0" />
+    </ItemGroup>
+
 </Project>
