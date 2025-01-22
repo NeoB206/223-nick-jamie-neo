@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
     selector: 'app-ledger',
     templateUrl: './ledger.component.html',
+    styleUrl: './ledger.component.css',
     imports: [CommonModule, FormsModule],
     providers: [LedgerService, HttpClient],
 })
