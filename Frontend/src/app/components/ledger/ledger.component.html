@@ -8,6 +8,8 @@
             >: {{ ledger.balance | currency }}
         </li>
     </ul>
+
+    <div *ngIf="username ==='admin'">
     <div>
         <h3>Create Ledger</h3>
         <form (ngSubmit)="onSubmitCreate()">
@@ -25,6 +27,7 @@
             <input type="number" id="deleteId" placeholder="ID" [(ngModel)]="deleteId" name="balance" required />
             <button type="submit">Delete</button>
         </form>
+    </div>
     </div>
 </div>
 </body>

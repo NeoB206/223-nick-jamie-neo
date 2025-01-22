@@ -21,10 +21,12 @@ export class LedgerComponent implements OnInit {
     name = '';
     balance = 0;
     deleteId = 0;
+    username: string | null = '';
 
     constructor(private ledgerService: LedgerService) {}
 
     ngOnInit(): void {
+        this.username = this.ledgerService.getLoggedInUsername()
         this.loadLedgers();
     }
 
