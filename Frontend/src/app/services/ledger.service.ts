@@ -49,6 +49,6 @@ export class LedgerService {
     }
 
     getLoggedInUsername(): string | null {
-        return this.authService.getUsername(); // Retrieve the stored username from AuthService
+        return localStorage.getItem('username'); // Retrieve the username from local storage
     }
 }

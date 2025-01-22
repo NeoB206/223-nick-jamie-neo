@@ -24,10 +24,6 @@ export class AuthService {
         return localStorage.getItem(this.tokenKey);
     }
 
-    getUsername(): string | null {
-        return localStorage.getItem('username'); // Retrieve the username from local storage
-    }
-
     clearToken() {
         localStorage.removeItem(this.tokenKey);
         this.isAuthenticated = false;
