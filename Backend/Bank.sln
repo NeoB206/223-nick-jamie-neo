@@ -17,6 +17,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "L-Bank.Tests.Loadtest.Cli",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "L-Bank.Concurrent.Test1", "L-Bank.Concurrent.Test1\L-Bank.Concurrent.Test1.csproj", "{AEB95EFE-A7BC-4E90-AEFC-399DBB9EA96F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "LedgerRepositoryDeleteTests", "LedgerRepositoryDeleteTests\LedgerRepositoryDeleteTests.csproj", "{6319CFBE-D1ED-45C3-8E5B-44AFAEF4AFFB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{AEB95EFE-A7BC-4E90-AEFC-399DBB9EA96F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{AEB95EFE-A7BC-4E90-AEFC-399DBB9EA96F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{AEB95EFE-A7BC-4E90-AEFC-399DBB9EA96F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{6319CFBE-D1ED-45C3-8E5B-44AFAEF4AFFB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{6319CFBE-D1ED-45C3-8E5B-44AFAEF4AFFB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{6319CFBE-D1ED-45C3-8E5B-44AFAEF4AFFB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{6319CFBE-D1ED-45C3-8E5B-44AFAEF4AFFB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
