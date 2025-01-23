@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpStatusCode } from '@angular/common/http';
+import { HttpClient } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Ledger } from '../models/ledger.interface';
 import { AuthService } from './auth.service';
@@ -46,5 +46,9 @@ export class LedgerService {
 
     deleteLedger(id: number) {
         return this.http.delete(`${this.apiUrl}/ledgers/${id}`);
+    }
+
+    getLoggedInUsername(): string | null {
+        return localStorage.getItem('username'); // Retrieve the username from local storage
     }
 }

@@ -31,6 +31,7 @@ export class LoginComponent {
             next: (response: Token) => {
                 console.log('Login successful', response);
                 this.authService.setToken(response.token);
+                localStorage.setItem('username', this.username);
                 void this.router.navigate(['/ledgers']);
             },
             error: (err) => {

@@ -8,6 +8,7 @@ import { HttpClient } from '@angular/common/http';
 @Component({
     selector: 'app-ledger',
     templateUrl: './ledger.component.html',
+    styleUrl: './ledger.component.css',
     imports: [CommonModule, FormsModule],
     providers: [LedgerService, HttpClient],
 })
@@ -20,10 +21,12 @@ export class LedgerComponent implements OnInit {
     name = '';
     balance = 0;
     deleteId = 0;
+    username: string | null = '';
 
     constructor(private ledgerService: LedgerService) {}
 
     ngOnInit(): void {
+        this.username = this.ledgerService.getLoggedInUsername()
         this.loadLedgers();
     }
 
@@ -61,5 +64,25 @@ export class LedgerComponent implements OnInit {
 
     onSubmitDelete(): void {
         this.ledgerService.deleteLedger(this.deleteId).subscribe(() => window.location.reload());
+    }
+
+
+    onBalanceInput(event: Event) {
+        const input = event.target as HTMLInputElement;
+        const value = input.value;
+        if (value && value.startsWith('0') && value.length > 1) {
+            // Remove leading zeros
+            input.value = value.replace(/^0+/, '');
+        }
+    }
+
+    // Method to handle the delete ID input and remove leading zeros
+    onDeleteIdInput(event: Event) {
+        const input = event.target as HTMLInputElement;
+        const value = input.value;
+        if (value && value.startsWith('0') && value.length > 1) {
+            // Remove leading zeros
+            input.value = value.replace(/^0+/, '');
+        }
     }
 }
