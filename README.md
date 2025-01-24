@@ -15,28 +15,28 @@ Beachte auch die READMEs in den einzelnen Projekten beim Setup der Umgebung.
 
 **Dokumentation der implementierten Prozess und der Überlegungen:**
 - Was war die Herausforderung? (3P)
-    1. Aufgabenstellungen waren Teilweise nicht gleich wie der Code
-    2. Das gesamte Projekt am Anfang zu verstehen
-    3. Mit .NET Arbeiten, da wir noch nicht viel erfahrung hatten
+    1. Aufgabenstellungen waren Teilweise nicht gleich wie der Code.
+    2. Testumgebung aufsetzen mit Dependency Injection.
+    3. Verbindung zur Datenbank hat am Anfang nicht funktionert.
 - Wie wurde die Herausforderung gelöst? (3P)
-    1. Nachfragen oder Selber herausfinden.
-    2. Genaues betrachten des Codes und auch Code abschnitte an ChatGPT schicken zum Analysieren
-    3. Viel Googlen und auch mit ChatGPT arbeiten.
+    1. Nachfragen oder selbst herausfinden.
+    2. Von einer Vorlage aus dem Internet eine Fixture übernommen und angepasst.
+    3. Datenbank manuell erstellen.
 - Was war das Resultat? (3P)
     1. Es konnten Alle Aufgaben gelöst werden.
-    2. Wir haben ein gutes Verständnis des gesamten Projekts.
-    3. Wir sind mit .NET vertauter.
+    2. Die Testumgebung konnte Problemlos ausgeführt werden und die Fixture konnte wiederverwendet werden.
+    3. Das Problem war, dass es die Datenbank nicht selbst von der App erstellt wurde und sie somit nicht gefunden hat.
 
 **Dokumentation der Tests und der Testergebnisse:**
 - Welche Tests wurden durchgeführt? (3P)
-    1. Integrationstests
-    2. Concurrent Tests
-    3. Lasttests
+    1. Ledger Delete
+    2. Book
+    3. Loadtest
 - Wie wurden die Tests durchgeführt? (3P)
     1. Ohne Mocks, mit einer Testdatenbank
-    2. Mithilfe von xUnit
+    2. Positiv, Negativ und Fehlertests
     3. Mithilfe von NBomber
 - Was war das Resultat? (3P)
-    1. Alle angeforderten Integrationstests konnten erfolgreich durchgeführt werden.
-    2. Alle angeforderten Concurrent Tests konnten erfolgreich durchgeführt werden.
-    3. Alle angeforderten Lasttests konnten erfolgreich durchgeführt werden.
+    1. Der Ledger wurde gelöscht.
+    2. Die Bookings konnten erfolgreich abgeschlossen werden. Bei den Concurrent Tests wurde auch erfolgreich ein Rollback ausgeführt, wann dies Notwendig war.
+    3. Die Lasttests waren erfolgreich und es konnten mehrere Szenarien hintereinander ausgeführt werden. Was man jedoch beachten muss, ist das beim Book Lasttest ein genug grosser Betrag auf dem Konto von Ledger 1 sein muss.
