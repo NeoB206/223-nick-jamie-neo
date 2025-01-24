@@ -14,7 +14,6 @@ public class LedgerRepositoryDeleteTests : IClassFixture<DependencyInjectionFixt
 
     public LedgerRepositoryDeleteTests(DependencyInjectionFixture fixture)
     {
-        // Resolve dependencies from the fixture's service provider
         var scope = fixture.ServiceProvider.CreateScope();
         _ledgerRepository = scope.ServiceProvider.GetRequiredService<ILedgerRepository>();
         _dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -24,7 +23,6 @@ public class LedgerRepositoryDeleteTests : IClassFixture<DependencyInjectionFixt
     private void SeedDatabase()
     {
         _dbContext.Ledgers.RemoveRange(_dbContext.Ledgers);
-        // Seed some initial ledgers
         _dbContext.Ledgers.AddRange(
             new Bank.Core.Models.Ledger { Id = 1, Balance = 1000m },
             new Bank.Core.Models.Ledger { Id = 2, Balance = 500m },
@@ -56,19 +54,16 @@ public class LedgerRepositoryDeleteTests : IClassFixture<DependencyInjectionFixt
     [Fact]
     public void Delete_TransactionRollback_OnFailure()
     {
-        // Arrange
         var existingLedger = _dbContext.Ledgers.Find(1);
-        Assert.NotNull(existingLedger); // Ensure the ledger exists before testing
+        Assert.NotNull(existingLedger);
 
-        // Simulate an error by passing an invalid ID in a transaction
         try
         {
             _dbContext.Database.BeginTransaction();
-            _ledgerRepository.Delete(999); // Nonexistent ledger
+            _ledgerRepository.Delete(999);
         }
         catch
         {
-            // Ensure the transaction is rolled back
             var rolledBackLedger = _dbContext.Ledgers.Find(1);
             Assert.NotNull(rolledBackLedger);
         }

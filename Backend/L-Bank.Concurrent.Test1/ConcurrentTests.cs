@@ -12,7 +12,6 @@ public class ConcurrentTests : IClassFixture<DependencyInjectionFixture>
 
     public ConcurrentTests(DependencyInjectionFixture fixture)
     {
-        // Resolve dependencies from the fixture's service provider
         var scope = fixture.ServiceProvider.CreateScope();
         _bookingRepository = scope.ServiceProvider.GetRequiredService<IBookingRepository>();
         _dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
@@ -22,7 +21,6 @@ public class ConcurrentTests : IClassFixture<DependencyInjectionFixture>
 
     private void SeedDatabase()
     {
-        // Seed data for tests
         const int totalLedgers = 100;
         _dbContext.Ledgers.RemoveRange(_dbContext.Ledgers);
         _dbContext.SaveChanges();
@@ -49,7 +47,6 @@ public class ConcurrentTests : IClassFixture<DependencyInjectionFixture>
 
             for (int i = 0; i < numberOfBookings; i++)
             {
-                // Pick two random ledgers
                 int sourceLedgerId = random.Next(1, 101);
                 int destinationLedgerId;
 
@@ -66,7 +63,7 @@ public class ConcurrentTests : IClassFixture<DependencyInjectionFixture>
                 }
                 catch (Exception ex)
                 {
-                    // Log exceptions if needed
+                    Console.WriteLine("Catch TestBookingParallel");
                 }
             }
         }
@@ -78,7 +75,6 @@ public class ConcurrentTests : IClassFixture<DependencyInjectionFixture>
 
         Task.WaitAll(tasks);
 
-        // Output final balances for verification (optional)
         var ledgers = _dbContext.Ledgers.ToList();
         foreach (var ledger in ledgers)
         {

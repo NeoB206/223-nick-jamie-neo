@@ -22,7 +22,6 @@ public class BookingRepository(AppDbContext context) : IBookingRepository
             using var transaction = _context.Database.BeginTransaction();
             try
             {
-                // Load source and destination accounts
                 var sourceLedger = _context.Ledgers.FirstOrDefault(l => l.Id == sourceLedgerId);
                 var destinationLedger = _context.Ledgers.FirstOrDefault(l => l.Id == destinationLedgerId);
 
@@ -32,20 +31,16 @@ public class BookingRepository(AppDbContext context) : IBookingRepository
                 if (sourceLedger.Balance < amount)
                     throw new InvalidOperationException("Insufficient funds in source ledger.");
 
-                // Perform the booking
                 sourceLedger.Balance -= amount;
                 destinationLedger.Balance += amount;
 
-                // Save changes
                 _context.SaveChanges();
 
-                // Commit transaction
                 transaction.Commit();
                 success = true;
             }
             catch (Exception ex)
             {
-                // Rollback transaction on error
                 transaction.Rollback();
                 Console.WriteLine($"Transaction failed: {ex.Message}");
                 repeatCount++;
@@ -53,22 +48,9 @@ public class BookingRepository(AppDbContext context) : IBookingRepository
                 {
                     return false;
                 }
-                // Retry logic: transaction will be retried unless max retries
             }
         }
 
         return success;
     }
-        // Machen Sie eine Connection und eine Transaktion
-
-        // In der Transaktion:
-
-        // Schauen Sie ob genügend Geld beim Spender da ist
-        // Führen Sie die Buchung durch und UPDATEn Sie die ledgers
-        // Beenden Sie die Transaktion
-        // Bei einem Transaktionsproblem: Restarten Sie die Transaktion in einer Schleife 
-        // (Siehe LedgersModel.SelectOne)
-
-    //    return false; // Lösch mich
-   // }
 }

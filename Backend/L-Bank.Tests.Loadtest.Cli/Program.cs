@@ -22,15 +22,12 @@ namespace L_Bank.Tests.Loadtest.Cli
         {
             try
             {
-                // Login to get JWT token
                 string jwt = await Login("admin", "adminpass");
                 Console.WriteLine("Login successful. JWT received.");
 
-                // Get starting money
                 double startingMoney = await GetTotalMoney(jwt);
                 Console.WriteLine($"Starting money: {startingMoney}");
 
-                // Run the load test
                 var scenario = CreateLoadTestScenario(jwt);
                 var bookingScenario = CreateBookingLoadTestScenario(jwt);
                 NBomberRunner
@@ -40,11 +37,9 @@ namespace L_Bank.Tests.Loadtest.Cli
                     .WithReportFormats(ReportFormat.Html)
                     .Run();
 
-                // Get ending money
                 double endingMoney = await GetTotalMoney(jwt);
                 Console.WriteLine($"Ending money: {endingMoney}");
 
-                // Compare and output result
                 double difference = endingMoney - startingMoney;
                 Console.WriteLine($"Difference: {difference:F4}");
                 if (difference == 0)
@@ -166,9 +161,9 @@ namespace L_Bank.Tests.Loadtest.Cli
                 })
                 .WithoutWarmUp()
                 .WithLoadSimulations(
-                    Simulation.Inject(rate: 50, // 50 Anfragen pro Sekunde
-                        interval: TimeSpan.FromSeconds(1), // Intervall zwischen Anfragen
-                        during: TimeSpan.FromSeconds(30)) // Gesamtdauer des Tests
+                    Simulation.Inject(rate: 50,
+                        interval: TimeSpan.FromSeconds(1),
+                        during: TimeSpan.FromSeconds(30))
                 );
  
             return scenario;
