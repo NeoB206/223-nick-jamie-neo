@@ -7,9 +7,6 @@ public static class WithTransactions
 {
     public static void Run(IEnumerable<Ledger> ledgers, ILedgerRepository ledgerRepository)
     {
-        ////////////////////
-        // Your Code Here
-        ////////////////////
         Console.WriteLine();
         Console.WriteLine("Booking, press ESC to stop.");
 
@@ -24,9 +21,6 @@ public static class WithTransactions
         }
 
         Console.WriteLine();
-        ////////////////////
-        // Your Code Here
-        ////////////////////
 
         Console.WriteLine();
         Console.WriteLine("Getting total money in system at the end.");

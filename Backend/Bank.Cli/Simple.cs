@@ -39,7 +39,8 @@ public static class Simple
                 ledgerRepository.Book(amount, fromLedger, toLedger);
 
                 // Print transaction details
-                Console.WriteLine($"Booked transaction: {amount} from {fromLedger.Name} (ID: {fromLedger.Id}, Balance: {fromLedger.Balance}) to {toLedger.Name} (ID: {toLedger.Id}, Balance: {toLedger.Balance})");
+                Console.WriteLine(
+                    $"Booked transaction: {amount} from {fromLedger.Name} (ID: {fromLedger.Id}, Balance: {fromLedger.Balance}) to {toLedger.Name} (ID: {toLedger.Id}, Balance: {toLedger.Balance})");
             }
             catch (Exception ex)
             {

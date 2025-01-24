@@ -25,15 +25,15 @@ public static class Program
                     .AllowAnyHeader();
             });
         });
-            
+
         builder.Services.Configure<JwtSettings>(
             builder.Configuration.GetSection("JwtSettings")
         );
-            
+
         builder.Services.Configure<DatabaseSettings>(
             builder.Configuration.GetSection("DatabaseSettings")
         );
-            
+
         builder.Services
             .AddAuthentication(x =>
             {
@@ -49,8 +49,9 @@ public static class Program
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.ASCII.GetBytes(jwtSettings?.PrivateKey ?? throw new InvalidOperationException("JwtSettings:PrivateKey is null"))
-                        ),
+                        Encoding.ASCII.GetBytes(jwtSettings?.PrivateKey ??
+                                                throw new InvalidOperationException("JwtSettings:PrivateKey is null"))
+                    ),
                     ValidateIssuer = false,
                     ValidateAudience = false
                 };
@@ -61,7 +62,7 @@ public static class Program
         builder.Services.AddTransient<IUserRepository, UserRepository>();
         builder.Services.AddTransient<ILoginService, LoginService>();
         builder.Services.AddTransient<IBookingRepository, BookingRepository>();
-            
+
         builder.Services.AddControllers();
 
         builder.Services.AddEndpointsApiExplorer();
@@ -74,7 +75,7 @@ public static class Program
                     Version = "v1"
                 }
             );
-                
+
             var securityScheme = new OpenApiSecurityScheme
             {
                 Name = "JWT Authentication",
@@ -104,8 +105,8 @@ public static class Program
 
             c.AddSecurityRequirement(securityRequirement);
         });
-            
-            
+
+
         builder.Services.AddDbContext<AppDbContext>(options =>
             options.UseMySql(
                 builder.Configuration.GetSection("DatabaseSettings:ConnectionString").Value,
@@ -113,7 +114,7 @@ public static class Program
                 sqlOptions => sqlOptions.MigrationsAssembly("Bank.Web")
             )
         );
-            
+
         var app = builder.Build();
         app.UseCors("AllowAll");
         app.UseSwagger();
@@ -132,7 +133,7 @@ public static class Program
 
             try
             {
-                var databaseSeeder = services.GetRequiredService<IDatabaseSeeder>();     
+                var databaseSeeder = services.GetRequiredService<IDatabaseSeeder>();
                 Console.WriteLine("Initializing database.");
                 databaseSeeder.Initialize();
                 Console.WriteLine("Seeding data.");
@@ -143,7 +144,7 @@ public static class Program
                 Console.WriteLine($"Error during startup: {ex.Message}");
             }
         }
-            
+
         app.Run();
     }
 }

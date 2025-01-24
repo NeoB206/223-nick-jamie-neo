@@ -7,10 +7,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 
-var configuration = new ConfigurationManager().AddJsonFile("appsettings.json", optional: true, reloadOnChange: true).Build();
+var configuration = new ConfigurationManager().AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+    .Build();
 var services = new ServiceCollection();
 
-var dbSettings = configuration.GetSection("DatabaseSettings").Get<DatabaseSettings>() ?? throw new InvalidOperationException();
+var dbSettings = configuration.GetSection("DatabaseSettings").Get<DatabaseSettings>() ??
+                 throw new InvalidOperationException();
 var options = Options.Create(dbSettings); // this is needed to ensure compatability with the web application
 services.AddSingleton(options);
 

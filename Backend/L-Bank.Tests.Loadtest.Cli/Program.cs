@@ -52,6 +52,7 @@ namespace L_Bank.Tests.Loadtest.Cli
                     Console.ForegroundColor = ConsoleColor.Red;
                     Console.WriteLine("MONEY HAS CHANGED!");
                 }
+
                 Console.ResetColor();
             }
             catch (Exception ex)
@@ -108,8 +109,8 @@ namespace L_Bank.Tests.Loadtest.Cli
             var scenario = Scenario.Create("http_scenario", async context =>
                 {
                     var request = Http.CreateRequest("GET", "http://localhost:5000/api/v1/BankInfo")
-                                      .WithHeader("Authorization", $"Bearer {jwt}")
-                                      .WithHeader("Accept", "application/json");
+                        .WithHeader("Authorization", $"Bearer {jwt}")
+                        .WithHeader("Accept", "application/json");
 
                     var response = await Http.Send(HttpClient, request);
 
@@ -124,7 +125,7 @@ namespace L_Bank.Tests.Loadtest.Cli
 
             return scenario;
         }
-        
+
         static ScenarioProps CreateBookingLoadTestScenario(string jwt)
         {
             var scenario = Scenario.Create("booking_scenario", async context =>
@@ -147,14 +148,14 @@ namespace L_Bank.Tests.Loadtest.Cli
                             balance = 10000
                         }
                     };
- 
+
                     var jsonContent = JsonSerializer.Serialize(bookingData);
- 
+
                     var request = Http.CreateRequest("POST", "http://localhost:5000/api/v1/Bookings")
                         .WithHeader("Accept", "application/json")
                         .WithHeader("Authorization", $"Bearer {jwt}")
                         .WithBody(new StringContent(jsonContent, Encoding.UTF8, "application/json"));
- 
+
                     var response = await Http.Send(HttpClient, request);
 
                     return response;
@@ -165,7 +166,7 @@ namespace L_Bank.Tests.Loadtest.Cli
                         interval: TimeSpan.FromSeconds(1),
                         during: TimeSpan.FromSeconds(30))
                 );
- 
+
             return scenario;
         }
 

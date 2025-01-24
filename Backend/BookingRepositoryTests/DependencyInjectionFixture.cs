@@ -11,13 +11,12 @@ namespace BookingRepositoryTests;
 
 public class DependencyInjectionFixture : IDisposable
 {
-    
     public IServiceProvider ServiceProvider { get; }
 
     public DependencyInjectionFixture()
     {
         var services = new ServiceCollection();
-        
+
         var configuration = new ConfigurationBuilder()
             .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
             .Build();
@@ -30,12 +29,13 @@ public class DependencyInjectionFixture : IDisposable
                 new MariaDbServerVersion(new Version(11, 6, 2))
             )
         );
-        
-        var dbSettings = configuration.GetSection("DatabaseSettings").Get<DatabaseSettings>() ?? throw new InvalidOperationException();
+
+        var dbSettings = configuration.GetSection("DatabaseSettings").Get<DatabaseSettings>() ??
+                         throw new InvalidOperationException();
         var options = Options.Create(dbSettings); // this is needed to ensure compatability with the web application
         services.AddSingleton<IOptions<DatabaseSettings>>(options);
 
-    
+
         services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
         services.AddTransient<ILedgerRepository, LedgerRepository>();
         services.AddTransient<IUserRepository, UserRepository>();
