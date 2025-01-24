@@ -28,7 +28,7 @@ namespace BookingRepositoryTests
             _context.Ledgers.AddRange(
                 new Bank.Core.Models.Ledger { Id = 99, Balance = 1000m },
                 new Bank.Core.Models.Ledger { Id = 100, Balance = 500m },
-                new Bank.Core.Models.Ledger { Id = 101, Balance = 0m } // Destination ledger for specific tests
+                new Bank.Core.Models.Ledger { Id = 101, Balance = 0m }
             );
 
             _context.SaveChanges();
@@ -37,10 +37,8 @@ namespace BookingRepositoryTests
         [Fact]
         public void Book_ValidTransaction_UpdatesBalances()
         {
-            // Act
             var result = _repository.Book(99, 100, 200m);
 
-            // Assert
             Assert.True(result);
 
             var sourceLedger = _context.Ledgers.FirstOrDefault(l => l.Id == 99);
@@ -53,14 +51,12 @@ namespace BookingRepositoryTests
         [Fact]
         public void Book_InsufficientFunds_ReturnsFalse()
         {
-            // Assert
             Assert.False(_repository.Book(100, 99, 1000m));
         }
 
         [Fact]
         public void Book_NegativeAmount_ThrowsArgumentException()
         {
-            // Assert
             Assert.Throws<ArgumentException>(() =>
                 _repository.Book(99, 100, -100m));
         }
@@ -68,7 +64,6 @@ namespace BookingRepositoryTests
         [Fact]
         public void Book_LedgerNotFound_ReturnsFalse()
         {
-            // Assert
             Assert.False(_repository.Book(999, 99, 100m));
         }
 
@@ -76,10 +71,5 @@ namespace BookingRepositoryTests
         {
             _context?.Dispose();
         }
-    }
-
-    public class DatabaseSettings
-    {
-        // Add necessary database settings properties if needed
     }
 }

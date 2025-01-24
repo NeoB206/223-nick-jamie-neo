@@ -35,10 +35,8 @@ public class LedgerRepositoryDeleteTests : IClassFixture<DependencyInjectionFixt
     [Fact]
     public void Delete_ExistingLedger_RemovesLedger()
     {
-        // Act
         _ledgerRepository.Delete(1);
 
-        // Assert
         var ledger = _dbContext.Ledgers.Find(1);
         Assert.Null(ledger);
     }
@@ -46,7 +44,6 @@ public class LedgerRepositoryDeleteTests : IClassFixture<DependencyInjectionFixt
     [Fact]
     public void Delete_NonExistingLedger_ThrowsException()
     {
-        // Act & Assert
         var exception = Assert.Throws<Exception>(() => _ledgerRepository.Delete(999));
         Assert.Equal("Ledger with ID 999 does not exist.", exception.Message);
     }

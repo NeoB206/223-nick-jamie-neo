@@ -16,7 +16,6 @@ var dbSettings = configuration.GetSection("DatabaseSettings").Get<DatabaseSettin
 var options = Options.Create(dbSettings); // this is needed to ensure compatability with the web application
 services.AddSingleton(options);
 
-// Register services
 services.AddTransient<IDatabaseSeeder, DatabaseSeeder>();
 services.AddTransient<ILedgerRepository, LedgerRepository>();
 services.AddTransient<IUserRepository, UserRepository>();
@@ -29,7 +28,6 @@ services.AddDbContext<AppDbContext>(dbContextOptionsBuilder =>
     )
 );
 
-// Build the service provider
 var serviceProvider = services.BuildServiceProvider();
 
 var databaseSeeder = serviceProvider.GetRequiredService<IDatabaseSeeder>();
@@ -72,7 +70,5 @@ catch (Exception ex)
     Console.WriteLine("Error in getting total money.");
     Console.WriteLine(ex.Message);
 }
-
-// Simple.Run(ledgerRepository);
 
 WithTransactions.Run(allLedgers, ledgerRepository);

@@ -32,7 +32,7 @@ public class DependencyInjectionFixture : IDisposable
 
         var dbSettings = configuration.GetSection("DatabaseSettings").Get<DatabaseSettings>() ??
                          throw new InvalidOperationException();
-        var options = Options.Create(dbSettings); // this is needed to ensure compatability with the web application
+        var options = Options.Create(dbSettings);
         services.AddSingleton<IOptions<DatabaseSettings>>(options);
 
 
@@ -43,7 +43,6 @@ public class DependencyInjectionFixture : IDisposable
 
         ServiceProvider = services.BuildServiceProvider();
 
-        // Ensure the database is created
         using var scope = ServiceProvider.CreateScope();
         var dbContext = scope.ServiceProvider.GetRequiredService<AppDbContext>();
         dbContext.Database.EnsureDeleted();

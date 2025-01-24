@@ -39,7 +39,7 @@ public class LedgersController(ILedgerRepository ledgerRepository) : ControllerB
         try
         {
             ledgerRepository.Delete(id);
-            return NoContent(); // Status 204
+            return NoContent();
         }
         catch (Exception ex)
         {

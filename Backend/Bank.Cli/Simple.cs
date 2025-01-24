@@ -6,7 +6,6 @@ public static class Simple
 {
     public static void Run(ILedgerRepository ledgerRepository)
     {
-        // Retrieve all ledgers and convert to an array
         var allLedgers = ledgerRepository.GetAllLedgers().ToArray();
 
         if (allLedgers.Length < 2)
@@ -22,23 +21,18 @@ public static class Simple
         {
             try
             {
-                // Choose random "from" and "to" accounts
                 var fromLedger = allLedgers[random.Next(allLedgers.Length)];
                 var toLedger = allLedgers[random.Next(allLedgers.Length)];
 
-                // Ensure "from" and "to" accounts are not the same
                 if (fromLedger.Id == toLedger.Id)
                 {
                     continue;
                 }
 
-                // Generate a random transaction amount between 1 and 100
                 var amount = random.Next(1, 101);
 
-                // Book the transaction
                 ledgerRepository.Book(amount, fromLedger, toLedger);
 
-                // Print transaction details
                 Console.WriteLine(
                     $"Booked transaction: {amount} from {fromLedger.Name} (ID: {fromLedger.Id}, Balance: {fromLedger.Balance}) to {toLedger.Name} (ID: {toLedger.Id}, Balance: {toLedger.Balance})");
             }
@@ -48,7 +42,6 @@ public static class Simple
             }
         }
 
-        // Line break after exiting the loop
         Console.WriteLine();
 
         Console.WriteLine("Getting total money in system at the end.");
